@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dekun Yang — Research</title>
+  <meta name="description" content="Research portfolio of Dekun Yang — computational condensed matter & materials."/>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* ============ Monet-inspired palettes ============ */
+
+    /* Palette 1 — Tranquil Lily Pond Greens (default) */
+    :root{
+      --background:#F0EFEA;   /* light ivory */
+      --text:#3A3936;         /* deep charcoal */
+      --muted:#6B6A66;        /* stone gray */
+      --accent:#6DA0B0;       /* soft teal (buttons) */
+      --tag-bg:#C5D592;       /* sage green (chips) */
+      --link:#705C8E;         /* muted purple */
+      --card: #F7F6F2;
+      --border:#E1E0DB;
+      --ring:#8CBACE;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --background:#2D2A27;  /* dark charcoal */
+        --text:#E3E1DC;        /* pale ivory */
+        --muted:#B0AFAE;       /* light gray */
+        --accent:#6DA0B0;      /* same teal */
+        --tag-bg:#C5D592;      /* same sage */
+        --link:#A88AD5;        /* light lavender */
+        --card:#23211F;
+        --border:#3A3734;
+        --ring:#90C6DA;
+      }
+    }
+
+    /* Palette 2 — Soft Dawn Rose & Gold (activated via [data-palette="rose"]) */
+    [data-palette="rose"]{
+      --background:#FCE3E1;   /* pale peach */
+      --text:#3A3936;         /* deep charcoal */
+      --muted:#6B6A66;        /* stone gray */
+      --accent:#D6B3A1;       /* light cocoa (buttons) */
+      --tag-bg:#EDD3C2;       /* blush beige (chips) */
+      --link:#705C8E;         /* muted purple */
+      --card:#FFF1EF;
+      --border:#F1D7D3;
+      --ring:#E4C6B9;
+    }
+    @media (prefers-color-scheme: dark){
+      [data-palette="rose"]{
+        --background:#282523;  /* dark brown-gray */
+        --text:#E3E1DC;        /* pale cream */
+        --muted:#B0AFAE;       /* light gray */
+        --accent:#D6B3A1;      /* same cocoa */
+        --tag-bg:#EDD3C2;      /* same beige */
+        --link:#A88AD5;        /* light lavender */
+        --card:#211E1C;
+        --border:#3A3532;
+        --ring:#E4C6B9;
+      }
+    }
+
+    /* ============ Base UI (no frameworks) ============ */
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      background:var(--background); color:var(--text);
+    }
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1120px; margin:0 auto; padding:0 16px}
+    header.nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:saturate(180%) blur(8px);
+      background:color-mix(in oklab, var(--background) 88%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:12px 0}
+    .nav a{margin-left:16px}
+    h1{font-size:clamp(28px,4vw,44px); margin:0}
+    h2{font-size:clamp(22px,3vw,32px); margin:0 0 6px}
+    h3{margin:0 0 6px}
+    .muted{color:var(--muted)}
+    .lead{font-size:18px}
+    .grid{display:grid; gap:24px}
+    @media(min-width:900px){ .grid-5{grid-template-columns:3fr 2fr} .grid-3{grid-template-columns:repeat(3,1fr)} }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px 18px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--border);
+      background:var(--accent);
+      color:#102027;
+      padding:8px 12px; border-radius:12px; cursor:pointer; text-decoration:none;
+      box-shadow:0 1px 0 rgba(0,0,0,.04);
+    }
+    .btn:hover{outline:2px solid var(--ring); outline-offset:2px; text-decoration:none}
+    .btn-ghost{
+      background:transparent; color:var(--text);
+      border-color:var(--border);
+    }
+    .row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{
+      padding:6px 10px; border-radius:999px; font-size:13px; cursor:pointer; user-select:none;
+      border:1px solid var(--border); background:var(--tag-bg); color:#1c1c1c;
+    }
+    .chip.active{outline:2px solid var(--ring); outline-offset:2px}
+    input[type="search"]{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:transparent; color:var(--text)
+    }
+    .kicker{font-size:13px; color:var(--muted); letter-spacing:.02em}
+    footer{border-top:1px solid var(--border); margin-top:48px; padding:24px 0; text-align:center; color:var(--muted)}
+    .icon{width:16px; height:16px; vertical-align:-2px}
+    .spacer{height:8px}
+    .tagline{display:flex; align-items:center; gap:8px; color:var(--muted)}
+    .table{display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:14px}
+    .table div{display:flex; justify-content:space-between; gap:12px}
+    @media(max-width:600px){ .table{grid-template-columns:1fr} }
+    .pub-item{display:flex; flex-direction:column; gap:8px}
+    .small{font-size:14px}
+    .nowrap{white-space:nowrap}
+    .toolbar{display:flex; align-items:center; gap:8px}
+    .seg{display:inline-flex; border:1px solid var(--border); border-radius:10px; overflow:hidden}
+    .seg button{
+      background:transparent; border:0; padding:6px 10px; cursor:pointer; color:var(--text)
+    }
+    .seg button.active{background:var(--card)}
+  </style>
+</head>
+<body>
+  <!-- ======= NAV ======= -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="nowrap" style="font-weight:600">Dekun Yang</a>
+      <nav class="row small">
+        <a href="#about">About</a>
+        <a href="#research">Research</a>
+        <a href="#publications">Publications</a>
+        <a href="#cv">CV</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="toolbar">
+        <div class="seg" role="tablist" aria-label="Color palette">
+          <button id="pal-lily" class="active" role="tab" aria-selected="true" title="Lily Pond (teal/ivy)">Lily Pond</button>
+          <button id="pal-rose" role="tab" aria-selected="false" title="Dawn Rose (peach/gold)">Dawn Rose</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======= ABOUT ======= -->
+  <main id="top" class="container" style="padding:28px 0 0">
+    <section id="about" class="grid grid-5" style="align-items:center">
+      <div>
+        <h1 id="name">Dekun Yang</h1>
+        <div class="tagline">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422A12.083 12.083 0 0118 20.5a12.083 12.083 0 01-6 1.5 12.083 12.083 0 01-6-1.5 12.083 12.083 0 01-.16-9.922L12 14z"/></svg>
+          <span id="tagline">Computational Condensed-Matter & Materials</span>
+        </div>
+        <p id="bio" class="lead muted" style="margin-top:8px">
+          B.A. + integrated M.Sci. Physics @ Cambridge. Research in ferroelectrics, charge-density waves, and excitonic effects in low-D materials using DFT/phonons/Wannier workflows.
+        </p>
+        <div class="row" style="margin-top:10px">
+          <a id="cvLinkTop" class="btn" href="Dekun_Yang_CV.pdf" download>Download CV</a>
+          <a id="emailLink" class="btn" href="mailto:dy305@cam.ac.uk">Email</a>
+          <a id="scholarLink" class="btn" href="https://scholar.google.com/citations?user=GOAmnSAAAAAJ&hl=en" target="_blank" rel="noreferrer">Google Scholar</a>
+          <a id="githubLink" class="btn" href="https://github.com/KungerYang" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div style="font-weight:600; margin-bottom:8px">At a glance</div>
+          <div class="table">
+            <div><span>Affiliation</span><span id="affiliation">University of Cambridge</span></div>
+            <div><span>Location</span><span id="location">Cambridge, UK</span></div>
+            <div><span>Focus</span><span>Ferroelectrics · CDWs · Excitons</span></div>
+            <div><span>Email</span><span id="emailMini" class="nowrap">dy305@cam.ac.uk</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= RESEARCH ======= -->
+    <section id="research" style="padding:28px 0">
+      <h2>Research</h2>
+      <div class="muted">Selected projects with short summaries and links to preprints, code, and posters.</div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="row">
+          <div style="flex:1; position:relative">
+            <input id="search" type="search" placeholder="Search projects (title, tags, year)…" aria-label="Search projects" />
+          </div>
+          <button id="clearTags" class="btn btn-ghost">Clear tags</button>
+        </div>
+        <div id="tagBar" class="chips" style="margin-top:10px"></div>
+      </div>
+
+      <div id="projectsGrid" class="grid grid-3" style="margin-top:16px"></div>
+    </section>
+
+    <!-- ======= PUBLICATIONS ======= -->
+    <section id="publications" style="padding:12px 0 10px">
+      <h2>Publications & Preprints</h2>
+      <div class="muted">Reverse-chronological; star denotes equal contribution.</div>
+      <div id="pubBlocks" style="margin-top:16px; display:grid; gap:18px"></div>
+    </section>
+
+    <!-- ======= CV ======= -->
+    <section id="cv" style="padding:16px 0">
+      <h2>Curriculum Vitae</h2>
+      <div class="muted">One-page PDF preferred. The button below downloads your current CV.</div>
+      <div class="spacer"></div>
+      <a id="cvLinkBottom" class="btn" href="Dekun_Yang_CV.pdf" download>Download CV (PDF)</a>
+    </section>
+
+    <!-- ======= CONTACT ======= -->
+    <section id="contact" style="padding:16px 0 32px">
+      <h2>Contact</h2>
+      <div class="row">
+        <a id="emailLink2" class="btn" href="mailto:dy305@cam.ac.uk">Email</a>
+        <a id="scholarLink2" class="btn" href="https://scholar.google.com/citations?user=GOAmnSAAAAAJ&hl=en" target="_blank" rel="noreferrer">Google Scholar</a>
+        <a id="githubLink2" class="btn" href="https://github.com/KungerYang" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> <span id="footerName">Dekun Yang</span>. Hosted on GitHub Pages.
+  </footer>
+
+  <!-- ======= DATA + LOGIC ======= -->
+  <script>
+    // —— Content pulled from your CV ——
+    const PROJECTS = [
+      {
+        title: "Tuning electronic and optical properties of 2D polymeric C60 by stacking two layers",
+        year: 2025,
+        tags: ["C60", "Excitons", "DFT"],
+        summary: "DFT and optical calculations show stronger visible-range exciton absorption in bilayer polymeric C60 vs monolayer — suggesting improved photovoltaic potential.",
+        links: { arxiv:"https://doi.org/10.1039/D4NR04540H", pdf:"", code:"" }
+      },
+      {
+        title: "Structural stability & symmetry analysis of a novel bismuth-oxide ferroelectric (Bi₆O₉)",
+        year: 2024,
+        tags: ["DFT","Phonons","Landau","Ferroelectrics"],
+        summary: "Group-theory-guided vibrational analysis + first-principles calculations to identify the stable bulk structure and Γ-mode coupling; tunability via strain/electric field.",
+        links: { arxiv:"", pdf:"", code:"" }
+      },
+      {
+        title: "Ferroelectrics via polar molecules encapsulated inside fullerenes",
+        year: 2024,
+        tags: ["C60","Charge Transfer","Polarization"],
+        summary: "Screening design for FE candidates; charge transfer between central ions and the cage explains reduced polarization in certain structures.",
+        links: { arxiv:"", pdf:"", code:"" }
+      },
+      {
+        title: "CDW & excitonic effects in 1T′-MoTe₂",
+        year: 2025,
+        tags: ["MoTe2","CDW","GW-BSE","Wannier"],
+        summary: "Unfolded bands + BSE to explore competing CDW reconstructions and exciton-phonon fingerprints; STM contrast patterns consistent with experiment.",
+        links: { arxiv:"", pdf:"" }
+      }
+    ];
+
+    const PUBLICATIONS = [
+      {
+        year: 2025,
+        items: [
+          {
+            authors: "D. Shearsby, J. Wu, D. Yang, B. Peng*",
+            title: "Tuning electronic and optical properties of 2D polymeric C60 by stacking two layers",
+            venue: "Nanoscale 17, 2616–2620 (2025). DOI: 10.1039/D4NR04540H",
+            links: { arxiv:"https://doi.org/10.1039/D4NR04540H", pdf:"" },
+            bibtex: `@article{Shearsby2025C60,
+  title={Tuning electronic and optical properties of 2D polymeric C60 by stacking two layers},
+  author={Shearsby, Dylan and Wu, Jiaqi and Yang, Dekun and Peng, Bo},
+  journal={Nanoscale},
+  year={2025},
+  volume={17},
+  pages={2616--2620},
+  doi={10.1039/D4NR04540H}
+}`
+          }
+        ]
+      },
+      {
+        year: 2024,
+        items: [
+          {
+            authors: "D. Yang*, C. A. M. Scott, D. Shearsby, N. Bristowe, D. Bennett*, B. Peng*",
+            title: "Structural stability and symmetry analysis of novel bismuth-oxide ferroelectric",
+            venue: "In preparation",
+            links: { arxiv:"", pdf:"" },
+            bibtex: `@unpublished{Yang2024Bi6O9,
+  title={Structural stability and symmetry analysis of a novel bismuth-oxide ferroelectric},
+  author={Yang, Dekun and Scott, Cameron A. M. and Shearsby, Dylan and Bristowe, Nicholas and Bennett, Daniel and Peng, Bo},
+  note={in preparation},
+  year={2024}
+}`
+          }
+        ]
+      }
+    ];
+
+    // —— Simple helpers ——
+    const byId = (id)=>document.getElementById(id);
+    function linkButton(href, label){
+      if(!href) return "";
+      return `<a class="btn" href="${href}" target="_blank" rel="noreferrer">${label}</a>`;
+    }
+
+    // Build tag list
+    function allTags(){
+      const s = new Set();
+      PROJECTS.forEach(p => (p.tags||[]).forEach(t=>s.add(t)));
+      return Array.from(s).sort();
+    }
+
+    // Render chips and projects
+    let activeTags = [];
+    function renderTags(){
+      const host = byId("tagBar");
+      host.innerHTML = "";
+      allTags().forEach(t=>{
+        const el = document.createElement("button");
+        el.className = "chip" + (activeTags.includes(t) ? " active" : "");
+        el.textContent = t;
+        el.onclick = ()=>{ toggleTag(t); };
+        host.appendChild(el);
+      });
+    }
+    function toggleTag(t){
+      if(activeTags.includes(t)) activeTags = activeTags.filter(x=>x!==t);
+      else activeTags.push(t);
+      renderTags();
+      renderProjects();
+    }
+    function matchesQuery(p, q){
+      if(!q) return true;
+      const hay = [p.title, p.summary, (p.tags||[]).join(" "), String(p.year)].join(" ").toLowerCase();
+      return hay.includes(q.toLowerCase());
+    }
+    function matchesTags(p){
+      return activeTags.length===0 || activeTags.every(t => (p.tags||[]).includes(t));
+    }
+    function renderProjects(){
+      const grid = byId("projectsGrid");
+      const q = byId("search").value.trim();
+      const filtered = PROJECTS.filter(p => matchesQuery(p,q) && matchesTags(p));
+      grid.innerHTML = "";
+      if(filtered.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "muted";
+        empty.textContent = "No projects match your filters.";
+        grid.appendChild(empty);
+        return;
+      }
+      filtered.forEach(p=>{
+        const card = document.createElement("div");
+        card.className="card";
+        card.innerHTML = `
+          <div class="kicker">${p.year} · ${(p.tags||[]).join(" · ")}</div>
+          <h3 style="margin:4px 0 6px">${p.title}</h3>
+          <p class="small muted">${p.summary}</p>
+          <div class="row" style="margin-top:8px">
+            ${linkButton(p?.links?.pdf, "PDF")}
+            ${linkButton(p?.links?.arxiv, "Link")}
+            ${linkButton(p?.links?.code, "Code")}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderPublications(){
+      const host = byId("pubBlocks");
+      host.innerHTML = "";
+      PUBLICATIONS.sort((a,b)=>b.year-a.year).forEach(block=>{
+        const wrap = document.createElement("div");
+        const header = document.createElement("div");
+        header.className = "kicker";
+        header.textContent = block.year;
+        wrap.appendChild(header);
+
+        (block.items||[]).forEach((it)=>{
+          const card = document.createElement("div");
+          card.className = "card pub-item";
+          const links = [
+            it?.links?.arxiv ? `<a class="btn" href="${it.links.arxiv}" target="_blank" rel="noreferrer">Link</a>` : "",
+            it?.links?.pdf ? `<a class="btn" href="${it.links.pdf}" target="_blank" rel="noreferrer">PDF</a>` : "",
+            it?.bibtex ? `<button class="btn btn-ghost" data-bibtex="${encodeURIComponent(it.bibtex)}">Copy BibTeX</button>` : ""
+          ].join(" ");
+          card.innerHTML = `
+            <div class="small muted">${it.authors}</div>
+            <div style="font-weight:600">${it.title}</div>
+            <div class="small muted">${it.venue||""}</div>
+            <div class="row">${links}</div>
+          `;
+          wrap.appendChild(card);
+        });
+
+        host.appendChild(wrap);
+      });
+
+      // Activate copy buttons
+      host.querySelectorAll("button[data-bibtex]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const text = decodeURIComponent(btn.getAttribute("data-bibtex")||"");
+          try{
+            await navigator.clipboard.writeText(text);
+            const old = btn.textContent;
+            btn.textContent = "Copied";
+            setTimeout(()=>btn.textContent = old, 1200);
+          }catch(err){
+            alert("Copy failed. Your browser may block clipboard access.");
+          }
+        });
+      });
+    }
+
+    // Palette toggle (persists)
+    function applyPalette(p){
+      const root = document.documentElement;
+      if(p === "rose"){ root.setAttribute("data-palette","rose"); }
+      else{ root.removeAttribute("data-palette"); }
+      localStorage.setItem("palette", p);
+      document.getElementById("pal-lily").classList.toggle("active", p!=="rose");
+      document.getElementById("pal-rose").classList.toggle("active", p==="rose");
+    }
+
+    // Init
+    function init(){
+      byId("year").textContent = new Date().getFullYear();
+
+      renderTags();
+      renderProjects();
+      renderPublications();
+
+      byId("clearTags").onclick = ()=>{ activeTags = []; renderTags(); renderProjects(); };
+      byId("search").addEventListener("input", renderProjects);
+
+      const saved = localStorage.getItem("palette") || "lily";
+      applyPalette(saved);
+
+      document.getElementById("pal-lily").onclick = ()=>applyPalette("lily");
+      document.getElementById("pal-rose").onclick = ()=>applyPalette("rose");
+    }
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
